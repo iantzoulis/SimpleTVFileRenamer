@@ -1,0 +1,58 @@
+﻿<Window x:Class="SimpleTVFileRenamer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SimpleTVFileRenamer"
+        mc:Ignorable="d"
+        Title="Simple TV File Renamer" Height="600" Width="900">
+    <Grid>
+        <!--Grid Definitions-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="500*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="300*"/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Row 1 Column 1-->
+        <Button x:Name="PathButton" Content="Choose Directory" Click="PathButton_Click" Margin="82,0,83,45" RenderTransformOrigin="-0.856,0.322" Grid.Column="1" Height="34" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="DirectoryBox" IsReadOnly="True" Margin="10,0,10,11" Grid.Column="1" Height="23" VerticalAlignment="Bottom"/>
+
+        <!--Row 1 Column 3-->
+        <Button x:Name="RenameButton" Content="Rename Files" Margin="96,0,96,31" Grid.Column="3" Click="RenameButton_Click" Height="34" VerticalAlignment="Bottom"/>
+
+        <!--Row 2 Column 1-->
+        <TextBlock Grid.Column="1" Margin="75,10,75,0" TextWrapping="Wrap" Text="Existing File Names" FontSize="14" Height="18" VerticalAlignment="Top" TextAlignment="Center" Grid.Row="1"/>
+        <ListBox x:Name="SourceFiles" Grid.Column="1" Grid.Row="1" Margin="10,33,10,10"/>
+
+        <!--Row 2 Column 2-->
+        <TextBlock x:Name="ShowNameBlock" Height="21" Margin="10,33,0,0" TextWrapping="Wrap" Text="Show Name" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Width="81" FontSize="13"/>
+        <TextBox x:Name="ShowNameTextBox" Margin="96,33,10,0" TextWrapping="NoWrap" Text="" Grid.Column="2" Grid.Row="1" Height="21" VerticalAlignment="Top"/>
+
+        <TextBlock x:Name="YearTextBlock" Height="21" Margin="10,59,0,0" TextWrapping="Wrap" Text="Year" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Width="81" FontSize="13"/>
+        <TextBox x:Name="YearTextBox" Margin="96,59,0,0" TextWrapping="NoWrap" Text="" PreviewTextInput="NumberValidationTextBox" Grid.Column="2" Grid.Row="1" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
+
+        <TextBlock x:Name="SeasonNumBlock" Height="21" Margin="10,85,0,0" TextWrapping="Wrap" Text="Season # *" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Width="81" FontSize="13"/>
+        <TextBox x:Name="SeasonNumTextBox" Margin="96,85,0,0" TextWrapping="NoWrap" Text="" PreviewTextInput="NumberValidationTextBox" Grid.Column="2" Grid.Row="1" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
+
+        <TextBlock x:Name="EpisodeNumBlock" Height="21" Margin="10,111,0,0" TextWrapping="Wrap" Text="Episode # *" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Width="81" FontSize="13"/>
+        <TextBox x:Name="EpisodeNumTextBox" Margin="96,111,0,0" TextWrapping="NoWrap" Text="" PreviewTextInput="NumberValidationTextBox" Grid.Column="2" Grid.Row="1" Height="21" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50"/>
+        <CheckBox x:Name="EpisodeIncCheckBox" Content="Increase After File Set" IsChecked="True" Grid.Column="2" Margin="151,113,10,0" Grid.Row="1" Height="19" VerticalAlignment="Top" FontSize="11"/>
+
+        <TextBlock x:Name="EpisodeTitleBlock" Height="21" Margin="10,137,0,0" TextWrapping="Wrap" Text="Episode Title*" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Left" Width="81" FontSize="13"/>
+        <TextBox x:Name="EpisodeTitleTextBox" Margin="96,137,10,0" TextWrapping="NoWrap" Text="" Grid.Column="2" Grid.Row="1" Height="21" VerticalAlignment="Top"/>
+        <TextBlock Grid.Column="2" HorizontalAlignment="Left" Margin="96,163,0,0" Grid.Row="1" TextWrapping="Wrap" Text="* required" VerticalAlignment="Top" FontSize="11" Width="50"/>
+        
+        <Button x:Name="SetFileNameButton" Content="Set Selected File Name" Margin="77,229,77,0" Grid.Column="2" Grid.Row="1" Click="SetFileNameButton_Click" Height="32" VerticalAlignment="Top"/>
+
+        <!--Row 2 Column 3-->
+        <TextBlock Grid.Column="3" Margin="72,10,72,0" TextWrapping="Wrap" Text="Updated File Names" FontSize="14" Height="18" VerticalAlignment="Top" TextAlignment="Center" Grid.Row="1"/>
+        <ListBox x:Name="DestinationFiles" Grid.Column="3" Grid.Row="1" Margin="10,33,10,10"/>
+    </Grid>
+</Window>
