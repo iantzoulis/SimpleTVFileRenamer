@@ -37,8 +37,8 @@ namespace SimpleTVFileRenamer
                 FileInfo[] Files = d.GetFiles();
                 if (Files.Length < 1)
                 {
-                    System.Windows.MessageBox.Show("No files were found in this directory.", "Empty Directory");
-                    DirectoryBox.Text = "";
+                    System.Windows.MessageBox.Show("No files loaded. There are no files in the chosen directory.", "Empty Directory");
+                    DirectoryBox.Clear();
                 }
                 else
                 {
@@ -46,10 +46,14 @@ namespace SimpleTVFileRenamer
                     {
                         SourceFiles.Items.Add(file.Name);
                         DestinationFiles.Items.Add(file.Name);
+                        OperationsTextBox.Text += $"\'{file.Name}\' has been loaded successfully.\n";
                     }
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "An Exception Has Occurred", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         public void SetFileName()
@@ -107,25 +111,57 @@ namespace SimpleTVFileRenamer
             {
                 output += "E" + EpisodeNumTextBox.Text;
             }
+            
             output += " - " + episodeTitle + ext;
 
-
-            DestinationFiles.Items[selectedIndex] = output;
-            EpisodeTitleTextBox.Clear();
-
-            if (selectedIndex < (SourceFiles.Items.Count - 1))
+            if (IsUnique(output))
             {
-                if (EpisodeIncCheckBox.IsChecked == true)
+                DestinationFiles.Items[selectedIndex] = output;
+                OperationsTextBox.Text += $"\'{SourceFiles.SelectedItem}\' is set to be renamed to \'{output}\'.\n";
+
+                if (selectedIndex < (SourceFiles.Items.Count - 1))
                 {
-                    SourceFiles.SelectedIndex = selectedIndex + 1;
-                    EpisodeNumTextBox.Text = $"{int.Parse(EpisodeNumTextBox.Text) + 1}";
-                    EpisodeTitleTextBox.Focus();
+                    if (EpisodeIncCheckBox.IsChecked == true)
+                    {
+                        SourceFiles.SelectedIndex = selectedIndex + 1;
+                        EpisodeNumTextBox.Text = $"{int.Parse(EpisodeNumTextBox.Text) + 1}";
+                        EpisodeTitleTextBox.Focus();
+                    }
+                    else
+                    {
+                        EpisodeNumTextBox.Clear();
+                        EpisodeNumTextBox.Focus();
+                    }
                 }
-                else
+
+                EpisodeTitleTextBox.Clear();
+            }
+            else
+            {
+                OperationsTextBox.Text += $"\'{output}\' already exists in the chosen directory. This file name will not be updated.\n";
+            }
+        }
+
+        public bool IsUnique(string fileName)
+        {
+            try
+            {
+                DirectoryInfo d = new DirectoryInfo(DirectoryBox.Text);
+                FileInfo[] Files = d.GetFiles();
+
+                foreach (FileInfo file in Files)
                 {
-                    EpisodeNumTextBox.Clear();
-                    EpisodeNumTextBox.Focus();
+                    if (file.Name == fileName)
+                    {
+                        return false;
+                    }
                 }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "An Exception Has Occurred", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
         }
 
@@ -143,16 +179,50 @@ namespace SimpleTVFileRenamer
                 FileInfo[] Files = d.GetFiles();
 
                 int i = 0;
+                string outputName;
                 foreach (FileInfo file in Files)
                 {
-                    System.IO.File.Move(file.FullName, $"{DirectoryBox.Text}{DestinationFiles.Items[i]}");
+                    outputName = $"{DirectoryBox.Text}{DestinationFiles.Items[i]}";
+                    if (File.Exists(outputName))
+                    {
+                        if (DestinationFiles.Items[i].ToString() == SourceFiles.Items[i].ToString())
+                        {
+                            OperationsTextBox.Text += $"\'{DestinationFiles.Items[i]}\' name has not been changed. This file will be skipped.\n";
+                        }
+                        else
+                        {
+                            OperationsTextBox.Text += $"\'{DestinationFiles.Items[i]}\' already exists in the output directory. This file will be skipped.\n";
+                        }
+                    }
+                    else
+                    {
+                        System.IO.File.Move(file.FullName, outputName);
+                        OperationsTextBox.Text += $"\'{SourceFiles.SelectedItem}\' has been renamed to \'{DestinationFiles.Items[i]}\'.\n";
+                    }
                     i++;
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "An Exception Has Occurred", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
+            System.Windows.MessageBox.Show("Job completed.", "Success");
+
+            ClearControls();
             LoadFiles();
-            System.Windows.Forms.MessageBox.Show("Job completed successfully.", "Success");
+        }
+
+        public void ClearControls()
+        {
+            SourceFiles.Items.Clear();
+            DestinationFiles.Items.Clear();
+            OperationsTextBox.Clear();
+            ShowNameTextBox.Clear();
+            YearTextBox.Clear();
+            SeasonNumTextBox.Clear();
+            EpisodeNumTextBox.Clear();
+            EpisodeTitleTextBox.Clear();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
